@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from collections import deque
+
 class BST_node(object):
 
 	def __init__(self):
@@ -57,13 +59,45 @@ class BST_ops(object):
 		elif val < p.info:
 			self.setleft(p, val)
 	
-	def intrav(self, bst):
-			if bst == None:
-				return
+	def pretrav(self, bst):
+		if bst == None:
+			return
 
-			print bst.info
-			self.intrav(bst.left)
-			self.intrav(bst.right)
+		print bst.info
+		self.intrav(bst.left)
+		self.intrav(bst.right)
+
+	def intrav(self, bst):
+		if bst == None:
+			return
+
+		self.intrav(bst.left)
+		print bst.info
+		self.intrav(bst.right)
+
+	def postorder(self, bst):
+		if bst == None:
+			return
+
+		self.postorder(bst.left)
+		self.postorder(bst.right)
+		print bst.info
+
+	def levelorder(self, bst):
+		node_queue = deque()
+
+		node_queue.appendleft(bst)
+
+		while len(node_queue) != 0:
+			node = node_queue.pop()
+
+			print node.info
+
+			if node.left != None:
+				node_queue.appendleft(node.left)
+
+			if node.right != None:
+				node_queue.appendleft(node.right)
 
 
 if __name__ == '__main__':
@@ -85,4 +119,14 @@ if __name__ == '__main__':
 
 		bst_ops.add_node(bst, val)
 
+	print('Pre-order traversal')
+	bst_ops.pretrav(bst)
+
+	print('In-order traversal')
 	bst_ops.intrav(bst)
+
+	print('Post-order traversal')
+	bst_ops.postorder(bst)
+
+	print('Level order')
+	bst_ops.levelorder(bst)
